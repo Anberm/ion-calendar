@@ -1,6 +1,6 @@
 {
 	"appId": "io.ionic.starter",
-	"appName": "ion-calendar",
+	"appName": "ion-calendar-demo",
 	"webDir": "www",
 	"bundledWebRuntime": false
 }
