@@ -19,6 +19,7 @@ export interface CalendarDay {
   isNextMonth?: boolean;
   title?: string;
   subTitle?: string;
+  isScheduled?:boolean;
   marked?: boolean;
   style?: {
     title?: string;
@@ -37,6 +38,7 @@ export interface DayConfig {
   date: Date;
   marked?: boolean;
   disable?: boolean;
+  isScheduled?:boolean;
   title?: string;
   subTitle?: string;
   cssClass?: string;

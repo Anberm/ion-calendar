@@ -36,6 +36,7 @@ export const MONTH_VALUE_ACCESSOR: any = {
                         [attr.aria-label]="getDayLabel(day) | date:DAY_DATE_FORMAT">
                   <p>{{ day.title }}</p>
                   <small *ngIf="day.subTitle">{{ day?.subTitle }}</small>
+                  <div *ngIf="day.isScheduled" class="scheduled"></div>
                 </button>
               </ng-container>
             </div>
