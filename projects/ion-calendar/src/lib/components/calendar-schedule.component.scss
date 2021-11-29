@@ -1,0 +1,73 @@
+:host {
+  .calendar-schedule__title {
+    font-size: 12px;
+    padding: 10px 8px;
+  }
+  .calendar-schedule-list {
+    height: 600px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .calendar-schedule-list__item {
+    padding: 10px 8px;
+    display: flex;
+    height: 96px;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #bfbfbf40;
+  }
+  .schedule-list__content {  
+    width: calc(100% - 54px);   
+    overflow-y: hidden;
+    overflow-x: scroll;
+    height: 100%;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .schedule-list__content-scroll {
+    display: inline-flex;
+    justify-content: space-between;
+    white-space: nowrap;
+    height: 100%;
+  }
+  .schedule-list__title {
+    display: inline-flex;
+    width: 54px;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+  }
+  .schedule-list__title-day {
+    font-size: 20px;
+  }
+
+  .schedule-list__title-week {
+    font-size: 12px;
+  }
+  .schedule-list__item {
+    width: 164px;
+    height: 100%;
+    position: relative;
+    margin-right: 1px;
+    border-top: 2px solid #36bbf7;
+    padding: 0px 3px 6px 4px;
+    background-color: #36bbf726;
+  }
+  .schedule-list__item-content {
+    width: 200px;
+    height: calc(100% - 12px);
+    overflow: auto;
+    &::-webkit-scrollbar {
+        display: none;
+      }
+
+  }
+  .schedule-list__item-time {
+    position: absolute;
+    bottom: 4;
+    font-size: 12px;
+    height: 16px;
+  }
+}

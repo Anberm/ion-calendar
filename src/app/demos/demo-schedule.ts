@@ -5,8 +5,6 @@ import { CalendarComponentOptions, DayConfig } from 'ion-calendar';
 @Component({
   selector: 'demo-schedule',
   template: `
-    <hr />
-    <h3 style="text-align: center;">schedule</h3>
     <ion-calendar
       [(ngModel)]="date"
       (select)="onSelect($event)"
