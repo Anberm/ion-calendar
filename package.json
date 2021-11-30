@@ -1,6 +1,6 @@
 {
-  "name": "ion-calendar-demo",
-  "version": "0.0.1",
+  "name": "ionx-calendar",
+  "version": "1.0.1",
   "author": "Anber",
   "scripts": {
     "ng": "ng",
