@@ -6,6 +6,7 @@ import { CalendarComponentOptions, DayConfig } from 'ion-calendar';
   selector: 'demo-schedule',
   template: `
     <ion-calendar
+      #calendar
       [(ngModel)]="date"
       (select)="onSelect($event)"
       [options]="options"
@@ -13,7 +14,7 @@ import { CalendarComponentOptions, DayConfig } from 'ion-calendar';
       format="YYYY-MM-DD"
     >
     </ion-calendar>
-    <ion-calendar-schedule></ion-calendar-schedule>
+    <ion-calendar-schedule [calendar]="calendar"></ion-calendar-schedule>
   `,
 })
 export class DemoScheduleComponent {
@@ -29,6 +30,24 @@ export class DemoScheduleComponent {
       {
         date: new Date(),
         isScheduled: true,
+        scheduleData: [
+          {
+            content: '测试1',
+            time: new Date(),
+          },
+          {
+            content: '测试2',
+            time: new Date(),
+          },
+          {
+            content: '测试3',
+            time: new Date(),
+          },
+          {
+            content: '测试4',
+            time: new Date(),
+          },
+        ],
       },
     ];
 

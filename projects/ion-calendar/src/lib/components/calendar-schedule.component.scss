@@ -4,20 +4,20 @@
     padding: 10px 8px;
   }
   .calendar-schedule-list {
-    height: 600px;
+    height: calc(100% - 323px);
     overflow-x: hidden;
     overflow-y: auto;
   }
   .calendar-schedule-list__item {
-    padding: 10px 8px;
+    padding: 0px 8px;
     display: flex;
     height: 96px;
     justify-content: center;
     align-items: center;
     border-top: 1px solid #bfbfbf40;
   }
-  .schedule-list__content {  
-    width: calc(100% - 54px);   
+  .schedule-list__content {
+    width: calc(100% - 54px);
     overflow-y: hidden;
     overflow-x: scroll;
     height: 100%;
@@ -38,6 +38,9 @@
     flex-direction: column;
     align-items: center;
     height: 100%;
+    &.today {
+      color: #3880ff;
+    }
   }
   .schedule-list__title-day {
     font-size: 20px;
@@ -60,9 +63,8 @@
     height: calc(100% - 12px);
     overflow: auto;
     &::-webkit-scrollbar {
-        display: none;
-      }
-
+      display: none;
+    }
   }
   .schedule-list__item-time {
     position: absolute;

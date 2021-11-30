@@ -1,13 +1,14 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA, ModuleWithProviders } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { CUSTOM_ELEMENTS_SCHEMA, ModuleWithProviders, NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
-
-import { CalendarModalOptions } from './calendar.model';
 import { CalendarController } from './calendar.controller';
+import { CalendarModalOptions } from './calendar.model';
+import { CALENDAR_COMPONENTS } from './components';
 import { DEFAULT_CALENDAR_OPTIONS } from './services/calendar-options.provider';
 import { CalendarService } from './services/calendar.service';
-import { CALENDAR_COMPONENTS } from './components';
+import { ScrollService } from './services/scroll.service';
+
 
 export function calendarController(modalCtrl: ModalController, calSvc: CalendarService) {
   return new CalendarController(modalCtrl, calSvc);

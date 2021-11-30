@@ -19,7 +19,8 @@ export interface CalendarDay {
   isNextMonth?: boolean;
   title?: string;
   subTitle?: string;
-  isScheduled?:boolean;
+  isScheduled?: boolean;
+  scheduleData?: ScheduleData[];
   marked?: boolean;
   style?: {
     title?: string;
@@ -34,14 +35,20 @@ export class CalendarMonth {
   days: Array<CalendarDay | void>;
 }
 
+export interface ScheduleData {
+  time: Date;
+  content: string;
+  [key: string]: any;
+}
 export interface DayConfig {
   date: Date;
   marked?: boolean;
   disable?: boolean;
-  isScheduled?:boolean;
   title?: string;
   subTitle?: string;
   cssClass?: string;
+  isScheduled?: boolean;
+  scheduleData?: ScheduleData[];
 }
 
 export interface ModalOptions {

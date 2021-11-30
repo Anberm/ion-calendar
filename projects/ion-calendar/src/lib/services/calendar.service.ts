@@ -14,6 +14,7 @@ import { DEFAULT_CALENDAR_OPTIONS } from './calendar-options.provider';
 
 const isBoolean = (input: any) => input === true || input === false;
 
+
 @Injectable()
 export class CalendarService {
   private readonly defaultOpts: CalendarModalOptions;
@@ -158,6 +159,10 @@ export class CalendarService {
     if (dayConfig && isBoolean(dayConfig.isScheduled)) {
       _isScheduled = dayConfig.isScheduled;
     }
+    let _scheduleData = [];
+    if (dayConfig && Array.isArray(dayConfig.scheduleData)) {
+      _scheduleData = dayConfig.scheduleData;
+    }
 
     let title = new Date(time).getDate().toString();
     if (dayConfig && dayConfig.title) {
@@ -184,6 +189,7 @@ export class CalendarService {
       cssClass: dayConfig ? dayConfig.cssClass || '' : '',
       disable: _disable,
       isScheduled: _isScheduled,
+      scheduleData: _scheduleData,
       isFirst: date.date() === 1,
       isLast: date.date() === date.daysInMonth(),
     };
