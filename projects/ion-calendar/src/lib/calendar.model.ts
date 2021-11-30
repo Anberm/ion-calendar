@@ -1,5 +1,14 @@
 import { AnimationBuilder } from '@ionic/core';
 
+export interface ScheduleDay {
+  id: string;
+  day: string;
+  date: Date | number;
+  weekDes: string;
+  isToday: boolean;
+  scheduleData?: ScheduleData[];
+}
+
 export interface CalendarOriginal {
   time: number;
   date: Date;
@@ -86,7 +95,7 @@ export interface CalendarModalOptions extends CalendarOptions {
 export interface CalendarOptions {
   from?: Date | number;
   to?: Date | number;
-  pickMode?: string;
+  pickMode?: PickMode;
   weekStart?: number;
   disableWeeks?: Array<number>;
   weekdays?: Array<string>;

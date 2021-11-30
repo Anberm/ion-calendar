@@ -3,7 +3,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": []
+    "types": [],
+    "paths": {
+      "ion-calendar": [
+        // "projects/ion-calendar/src/public-api",
+        "dist/ion-calendar",
+      ]
+    },
   },
   "files": [
     "src/main.ts",

@@ -1,30 +1,17 @@
+import { DOCUMENT } from '@angular/common';
 import {
   AfterViewInit,
   Component,
-  ElementRef,
   Inject,
   Input,
   OnDestroy,
-  OnInit,
-  ViewChild,
 } from '@angular/core';
-
-import { CalendarComponent } from './calendar.component';
 import * as moment from 'moment';
-import { CalendarDay, ScheduleData } from '../calendar.model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { CalendarDay, ScheduleData, ScheduleDay } from '../calendar.model';
 import { ScrollService } from '../services/scroll.service';
-import { DOCUMENT } from '@angular/common';
-
-export interface ScheduleDay {
-  id: string;
-  day: string;
-  date: Date | number;
-  weekDes: string;
-  isToday: boolean;
-  scheduleData?: ScheduleData[];
-}
+import { CalendarComponent } from './calendar.component';
 
 @Component({
   selector: 'ion-calendar-schedule',

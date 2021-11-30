@@ -7,7 +7,6 @@ import { CalendarModalOptions } from './calendar.model';
 import { CALENDAR_COMPONENTS } from './components';
 import { DEFAULT_CALENDAR_OPTIONS } from './services/calendar-options.provider';
 import { CalendarService } from './services/calendar.service';
-import { ScrollService } from './services/scroll.service';
 
 
 export function calendarController(modalCtrl: ModalController, calSvc: CalendarService) {
