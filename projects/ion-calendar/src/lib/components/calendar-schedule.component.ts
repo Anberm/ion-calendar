@@ -57,6 +57,7 @@ export class CalendarScheduleComponent implements OnDestroy, AfterViewInit {
   private _calendar?: CalendarComponent;
   @Input() showTitle = true;
   @Input() title = '日程';
+  @Input() topOffset = 470;
 
   @Input() data: any[] = [];
 
@@ -133,14 +134,14 @@ export class CalendarScheduleComponent implements OnDestroy, AfterViewInit {
     let tDay = tgDay ? moment(tgDay.time) : moment();
 
     const fDay = this.days.find((d) => tDay.isSame(d.date, 'days'));
-    const topOffset = 470;
+
     if (fDay) {
       const el = this._getDoc().getElementById(fDay.id);
-      this.scrollSrv.scrollToElement(container, el, topOffset);
+      this.scrollSrv.scrollToElement(container, el, this.topOffset);
     } else {
       const el = this._getDoc().getElementById(this.days[0].id);
 
-      this.scrollSrv.scrollToElement(container, el, topOffset);
+      this.scrollSrv.scrollToElement(container, el, this.topOffset);
     }
   }
 }
