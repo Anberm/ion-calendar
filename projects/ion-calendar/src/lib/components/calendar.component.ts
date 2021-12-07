@@ -112,6 +112,7 @@ interface CompatibleIcons {
       </ion-calendar-week>
 
       <ion-calendar-month
+        [opt]="_d"
         [componentMode]="true"
         [(ngModel)]="_calendarMonthValue"
         [month]="monthOpt"
@@ -328,6 +329,17 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
         this.change.emit(date);
         break;
 
+      case pickModes.SINGLEWEEK:
+        if ($event[0] && $event[1]) {
+          const rangeDate = {
+            from: this._handleType($event[0].time),
+            to: this._handleType($event[1].time),
+          };
+          this._onChanged(rangeDate);
+          this.change.emit(rangeDate);
+        }
+        break;
+
       case pickModes.RANGE:
         if ($event[0] && $event[1]) {
           const rangeDate = {
@@ -452,6 +464,18 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
     switch (this._d.pickMode) {
       case 'single':
         this._calendarMonthValue[0] = this._createCalendarDay(value);
+        break;
+      case 'single-week':
+        if (value.from) {
+          this._calendarMonthValue[0] = value.from
+            ? this._createCalendarDay(value.from)
+            : null;
+        }
+        if (value.to) {
+          this._calendarMonthValue[1] = value.to
+            ? this._createCalendarDay(value.to)
+            : null;
+        }
         break;
 
       case 'range':

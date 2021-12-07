@@ -14,7 +14,6 @@ import { DEFAULT_CALENDAR_OPTIONS } from './calendar-options.provider';
 
 const isBoolean = (input: any) => input === true || input === false;
 
-
 @Injectable()
 export class CalendarService {
   private readonly defaultOpts: CalendarModalOptions;
@@ -68,6 +67,7 @@ export class CalendarService {
       id,
       from,
       to,
+      firstDay:calendarOptions.firstDay,
       pickMode,
       autoDone,
       color,
@@ -290,6 +290,12 @@ export class CalendarService {
     switch (pickMode) {
       case pickModes.SINGLE:
         result = this.multiFormat(original[0].time);
+        break;
+      case pickModes.SINGLEWEEK:
+        result = {
+          from: this.multiFormat(original[0].time),
+          to: this.multiFormat((original[1] || original[0]).time),
+        };
         break;
       case pickModes.RANGE:
         result = {

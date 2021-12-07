@@ -93,6 +93,10 @@ export interface CalendarModalOptions extends CalendarOptions {
 }
 
 export interface CalendarOptions {
+  /**
+   * 一周的第一天是周几，周一：0，周日：6
+   */
+  firstDay?:number;
   from?: Date | number;
   to?: Date | number;
   pickMode?: PickMode;
@@ -139,7 +143,7 @@ export type Colors =
   | 'light'
   | 'dark'
   | string;
-export type PickMode = 'multi' | 'single' | 'range';
+export type PickMode = 'multi' | 'single' | 'range'| 'single-week' ;
 export type CalendarComponentTypeProperty =
   | 'string'
   | 'js-date'
