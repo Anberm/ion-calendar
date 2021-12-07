@@ -4,7 +4,7 @@ import { MonthComponent } from './month.component';
 import { CalendarComponent } from './calendar.component';
 import { MonthPickerComponent } from './month-picker.component';
 import { CalendarScheduleComponent } from './calendar-schedule.component';
-import { TimePipe } from '../time.pipe';
+import { TimePipe } from './time.pipe';
 
 export const CALENDAR_COMPONENTS = [
   CalendarModal,
@@ -13,5 +13,8 @@ export const CALENDAR_COMPONENTS = [
   CalendarComponent,
   MonthPickerComponent,
   CalendarScheduleComponent,
+];
+
+export const CALENDAR_PIPES = [
   TimePipe,
 ];
