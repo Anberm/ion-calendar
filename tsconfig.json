@@ -16,7 +16,7 @@
     "lib": ["es2018", "dom"],
     "paths": {
       "ion-calendar": [
-        "projects/ion-calendar/src/public-api",
+        "projects/ion-calendar/index",
         // "dist/ion-calendar",
       ]
     },

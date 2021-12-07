@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 
-import { CalendarComponent, CalendarComponentOptions } from 'ion-calendar';
+import { CalendarComponent, CalendarComponentOptions } from 'projects/ion-calendar/public-api';
 
 @Component({
   selector: 'demo-methods',
