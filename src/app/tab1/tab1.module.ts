@@ -6,7 +6,7 @@ import { Tab1Page } from './tab1.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
 import { Tab1PageRoutingModule } from './tab1-routing.module';
-import { CalendarModule } from 'projects/ion-calendar/public-api';
+import { CalendarModule } from 'ion-calendar';
 import { DemosModule } from '../demos/demos.module';
 
 @NgModule({

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { CalendarComponentOptions, DayConfig } from 'projects/ion-calendar/public-api';
+import { CalendarComponentOptions, DayConfig } from 'ion-calendar';
 
 @Component({
   selector: 'demo-schedule',

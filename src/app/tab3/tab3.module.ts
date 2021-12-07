@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Tab3Page } from './tab3.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
-import { CalendarModule } from 'projects/ion-calendar/public-api';
+import { CalendarModule } from 'ion-calendar';
 import { DemosModule } from '../demos/demos.module';
 import { Tab3PageRoutingModule } from './tab3-routing.module';
 

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { CalendarModalOptions } from 'projects/ion-calendar/public-api';
+import { CalendarModalOptions } from 'ion-calendar';
 import { SubHeaderCalendarModal } from './sub-header-calendar-modal';
 
 @Component({

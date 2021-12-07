@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 
-import { CalendarComponentOptions } from 'projects/ion-calendar/public-api';
+import { CalendarComponentOptions } from 'ion-calendar';
 
 @Component({
   selector: 'demo-events',

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import * as moment from 'moment';
 
-import { CalendarModal, CalendarModalOptions } from 'projects/ion-calendar/public-api';
+import { CalendarModal, CalendarModalOptions } from 'ion-calendar';
 
 @Component({
   selector: 'demo-modal-locale',
