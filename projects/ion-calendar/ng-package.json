@@ -2,6 +2,10 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/ion-calendar",
   "lib": {
-    "entryFile": "public-api.ts"
+    "entryFile": "public-api.ts",
+    "umdModuleIds": {
+      "@ionic/angular": "@ionic/angular",
+      "moment": "moment"
+    }
   }
 }
