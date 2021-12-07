@@ -172,8 +172,8 @@
     "ion-calendar": {
       "projectType": "library",
       "root": "projects/ion-calendar",
-      "sourceRoot": "projects/ion-calendar/src",
-      "prefix": "lib",
+      "sourceRoot": "projects/ion-calendar",
+      "prefix": "",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",

@@ -21,8 +21,9 @@ import { DemoModalRangeBackwardsComponent } from './demo-modal-range-backwards';
 import { DemoModalCustomSubHeaderComponent } from './demo-modal-custom-sub-header';
 import { SubHeaderCalendarModal } from './sub-header-calendar-modal';
 import { DemoModalRangeWithDefaultEndDate } from './demo-modal-range-with-default-end-date';
-import { CalendarModule } from 'ion-calendar';
+import { CalendarModule } from 'projects/ion-calendar/public-api';
 import { DemoScheduleComponent } from './demo-schedule';
+import { DemoScheduleWeekComponent } from './demo-schedule-week';
 
 const COMPONENTS = [
   DemoModalBasicComponent,
@@ -37,6 +38,7 @@ const COMPONENTS = [
   DemoModalConfigDaysComponent,
   DemoBasicComponent,
   DemoScheduleComponent,
+  DemoScheduleWeekComponent,
   DemoMultiComponent,
   DemoRangeComponent,
   DemoOptionsComponent,

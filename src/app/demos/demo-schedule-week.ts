@@ -1,30 +1,40 @@
 import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { CalendarComponentOptions, DayConfig } from 'projects/ion-calendar/public-api';
-
+import { CalendarComponentOptions, CalendarDay, DayConfig } from 'projects/ion-calendar/public-api';
+import * as moment from 'moment';
 @Component({
-  selector: 'demo-schedule',
+  selector: 'demo-schedule-week',
   template: `
     <ion-calendar
       #calendar
-      [(ngModel)]="date"
+      [ngModel]="date"
       (select)="onSelect($event)"
       [options]="options"
       type="js-date"
       format="YYYY-MM-DD"
     >
     </ion-calendar>
-    <ion-calendar-schedule [calendar]="calendar"></ion-calendar-schedule>
   `,
 })
-export class DemoScheduleComponent {
-  date: Date = new Date();
-
+export class DemoScheduleWeekComponent {
+  date: any;
   options: CalendarComponentOptions = {
     from: new Date(2000, 0, 1),
+    pickMode: 'single-week',
+    firstDay: 1,
   };
 
   constructor(public modalCtrl: ModalController) {
+    moment.locale('zh-cn');
+    const weekOfday = moment().weekday();
+    this.date = {
+      from: moment()
+        .startOf('day')
+        .subtract(weekOfday - (this.options.firstDay || 0), 'days'),
+      to: moment()
+        .startOf('day')
+        .add(6 + (this.options.firstDay || 0) - weekOfday, 'days'),
+    };
     const daysConfig: DayConfig[] = [
       //设置某天有排班
       {
@@ -54,7 +64,11 @@ export class DemoScheduleComponent {
     this.options.daysConfig = daysConfig;
   }
 
-  onSelect($event) {
-    console.log($event);
+  onSelect($event: CalendarDay) {
+    const wd = moment($event.time).weekday();
+    // this.date = {
+    //   from: moment().subtract(wd, 'days'),
+    //   to: moment().add(6 - wd, 'days'),
+    // };
   }
 }

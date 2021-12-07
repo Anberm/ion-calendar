@@ -4,19 +4,40 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { CalendarController } from './calendar.controller';
 import { CalendarModalOptions } from './calendar.model';
-import { CALENDAR_COMPONENTS } from './components';
 import { DEFAULT_CALENDAR_OPTIONS } from './services/calendar-options.provider';
 import { CalendarService } from './services/calendar.service';
 
+import { CalendarModal } from './components/calendar.modal';
+import { CalendarWeekComponent } from './components/calendar-week.component';
+import { MonthComponent } from './components/month.component';
+import { CalendarComponent } from './components/calendar.component';
+import { MonthPickerComponent } from './components/month-picker.component';
+import { CalendarScheduleComponent } from './components/calendar-schedule.component';
+import { TimePipe } from './components/time.pipe';
 
 export function calendarController(modalCtrl: ModalController, calSvc: CalendarService) {
   return new CalendarController(modalCtrl, calSvc);
 }
 
+
+export const CALENDAR_COMPONENTS = [
+  CalendarModal,
+  CalendarWeekComponent,
+  MonthComponent,
+  CalendarComponent,
+  MonthPickerComponent,
+  CalendarScheduleComponent,
+];
+
+export const CALENDAR_PIPES = [
+  TimePipe,
+];
+
+
 @NgModule({
   imports: [CommonModule, IonicModule, FormsModule],
-  declarations: CALENDAR_COMPONENTS,
-  exports: CALENDAR_COMPONENTS,
+  declarations: [...CALENDAR_COMPONENTS,...CALENDAR_PIPES],
+  exports:  [...CALENDAR_COMPONENTS,...CALENDAR_PIPES],
   entryComponents: CALENDAR_COMPONENTS,
   providers: [
     CalendarService,
