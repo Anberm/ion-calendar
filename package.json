@@ -1,11 +1,11 @@
 {
   "name": "ionx-calendar",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "author": "Anber",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build --prod",
+    "start": "ng serve --configuration production",
+    "build": "ng build --configuration production",
     "build-lib": "ng build ion-calendar",
     "pub-lib": "npm run build-lib && cd dist/ion-calendar && npm publish",
     "test": "ng test",

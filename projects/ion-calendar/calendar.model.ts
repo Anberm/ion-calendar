@@ -41,7 +41,7 @@ export interface CalendarDay {
 
 export class CalendarMonth {
   original: CalendarOriginal;
-  days: Array<CalendarDay | void>;
+  days: Array<CalendarDay | any>;
 }
 
 export interface ScheduleData {
