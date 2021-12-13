@@ -17,6 +17,7 @@ export * from './components/calendar-week.component';
 export * from './components/calendar.component';
 export * from './components/calendar.modal';
 export * from './components/month-picker.component';
+export * from './components/quarter-picker.component';
 export * from './components/month.component';
 export * from './services/calendar-options.provider';
 export * from './components/time.pipe';
