@@ -14,6 +14,7 @@ import { CalendarComponent } from './components/calendar.component';
 import { MonthPickerComponent } from './components/month-picker.component';
 import { CalendarScheduleComponent } from './components/calendar-schedule.component';
 import { TimePipe } from './components/time.pipe';
+import { QuarterPickerComponent } from './components/quarter-picker.component';
 
 export function calendarController(modalCtrl: ModalController, calSvc: CalendarService) {
   return new CalendarController(modalCtrl, calSvc);
@@ -26,6 +27,7 @@ export const CALENDAR_COMPONENTS = [
   MonthComponent,
   CalendarComponent,
   MonthPickerComponent,
+  QuarterPickerComponent,
   CalendarScheduleComponent,
 ];
 

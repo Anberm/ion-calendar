@@ -16,6 +16,9 @@ import {
   CalendarComponentPayloadTypes,
   CalendarComponentMonthChange,
   CalendarComponentTypeProperty,
+  SelectMode,
+  CalendarComponentQuarterChange,
+  CalendarComponentYearChange,
 } from '../calendar.model';
 import { CalendarService } from '../services/calendar.service';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -54,7 +57,7 @@ interface CompatibleIcons {
           (click)="switchView()"
         >
           {{ _monthFormat(monthOpt.original.time) }}
-          <ion-icon
+          <ion-icon *ngIf="mode!=='year'"
             class="arrow-dropdown"
             [name]="
               _view === 'days'
@@ -105,6 +108,7 @@ interface CompatibleIcons {
     </div>
     <ng-template [ngIf]="_view === 'days'" [ngIfElse]="monthPicker">
       <ion-calendar-week
+        *ngIf="!mode"
         color="transparent"
         [weekArray]="_d.weekdays"
         [weekStart]="_d.weekStart"
@@ -112,6 +116,7 @@ interface CompatibleIcons {
       </ion-calendar-week>
 
       <ion-calendar-month
+        *ngIf="!mode"
         [opt]="_d"
         [componentMode]="true"
         [(ngModel)]="_calendarMonthValue"
@@ -130,12 +135,17 @@ interface CompatibleIcons {
 
     <ng-template #monthPicker>
       <ion-calendar-month-picker
+        *ngIf="!mode || mode == 'month'"
         [color]="_d.color"
         [monthFormat]="_options?.monthPickerFormat"
         (select)="monthOnSelect($event)"
         [month]="monthOpt"
       >
       </ion-calendar-month-picker>
+      <ion-calendar-quarter-picker
+        *ngIf="mode == 'quarter'"
+        (select)="quarterOnSelect($event)"
+      ></ion-calendar-quarter-picker>
     </ng-template>
   `,
 })
@@ -164,6 +174,14 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
   }
 
   monthOpt: CalendarMonth;
+  _mode: SelectMode = undefined;
+  @Input()
+  set mode(val: SelectMode) {
+    this._mode = val;
+  }
+  get mode() {
+    return this._mode;
+  }
 
   @Input()
   format: string = defaults.DATE_FORMAT;
@@ -173,6 +191,10 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
   readonly = false;
   @Output()
   change: EventEmitter<CalendarComponentPayloadTypes> = new EventEmitter();
+  @Output()
+  yearChange: EventEmitter<CalendarComponentYearChange> = new EventEmitter();
+  @Output()
+  quarterChange: EventEmitter<CalendarComponentQuarterChange> = new EventEmitter();
   @Output()
   monthChange: EventEmitter<CalendarComponentMonthChange> = new EventEmitter();
   @Output()
@@ -237,7 +259,11 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
   }
 
   prev(): void {
-    if (this._view === 'days') {
+    if (
+      this._view === 'days' &&
+      this.mode != 'quarter' &&
+      this.mode != 'year'
+    ) {
       this.backMonth();
     } else {
       this.prevYear();
@@ -245,7 +271,11 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
   }
 
   next(): void {
-    if (this._view === 'days') {
+    if (
+      this._view === 'days' &&
+      this.mode != 'quarter' &&
+      this.mode != 'year'
+    ) {
       this.nextMonth();
     } else {
       this.nextYear();
@@ -256,17 +286,23 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
     if (moment(this.monthOpt.original.time).year() === 1970) {
       return;
     }
-    const backTime = moment(this.monthOpt.original.time)
-      .subtract(1, 'year')
-      .valueOf();
-    this.monthOpt = this.createMonth(backTime);
+    const oldOpt = this.monthOpt;
+    this.yearOnSelect(-1);
+    if (this.mode == 'quarter') {
+      this.quarterOnSelect(this._oldQuarter, oldOpt);
+    } else if (this.mode == 'month') {
+      this.monthOnSelect(this._oldMonth, oldOpt);
+    }
   }
 
   nextYear(): void {
-    const nextTime = moment(this.monthOpt.original.time)
-      .add(1, 'year')
-      .valueOf();
-    this.monthOpt = this.createMonth(nextTime);
+    const oldOpt = this.monthOpt;
+    this.yearOnSelect(1);
+    if (this.mode == 'quarter') {
+      this.quarterOnSelect(this._oldQuarter, oldOpt);
+    } else if (this.mode == 'month') {
+      this.monthOnSelect(this._oldMonth, oldOpt);
+    }
   }
 
   nextMonth(): void {
@@ -309,15 +345,60 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
     return this.monthOpt.original.time > moment(this._d.from).valueOf();
   }
 
-  monthOnSelect(month: number): void {
+  yearOnSelect(addSub: number): void {
+    const newYearTime = moment(this.monthOpt.original.time)
+      .add(addSub, 'year')
+      .valueOf();
+    let oldYearTime = moment(this.monthOpt.original.time).valueOf();
+    this.monthOpt = this.createMonth(newYearTime);
+    if (this.mode == 'year') {
+      this.yearChange.emit({
+        oldYear: this.calSvc.multiFormat(oldYearTime),
+        newYear: this.calSvc.multiFormat(newYearTime),
+      });
+    }
+  }
+
+  private _oldMonth;
+  monthOnSelect(month?: number, oldOpt?: CalendarMonth): void {
+    if (month == undefined) {
+      month = moment(this.monthOpt.original.time).month();
+    }
     this._view = 'days';
     const newMonth = moment(this.monthOpt.original.time).month(month).valueOf();
-    const oldMontTime = this.monthOpt.original.time;
+    const oldMontTime = oldOpt
+      ? oldOpt.original.time
+      : this.monthOpt.original.time;
+    this._oldMonth = month;
 
     this.monthOpt = this.createMonth(newMonth);
+
     this.monthChange.emit({
       oldMonth: this.calSvc.multiFormat(oldMontTime),
       newMonth: this.calSvc.multiFormat(newMonth),
+    });
+  }
+  private _oldQuarter;
+  quarterOnSelect(quarter?: number, oldOpt?: CalendarMonth): void {
+    if (quarter == undefined) {
+      quarter = moment(this.monthOpt.original.time).quarter();
+    }
+    this._view = 'days';
+    const newQuarter = moment(this.monthOpt.original.time)
+      .quarter(quarter)
+      .valueOf();
+    const oldQuarterTime = oldOpt
+      ? oldOpt.original.time
+      : this.monthOpt.original.time;
+
+    this._oldQuarter = quarter;
+
+    
+    this.monthOpt = this.createMonth(newQuarter);
+    
+    this.quarterChange.emit({
+      oldQuarter: this.calSvc.multiFormat(oldQuarterTime),
+      newQuarter: this.calSvc.multiFormat(newQuarter),
     });
   }
 
@@ -392,7 +473,15 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
   }
 
   _monthFormat(date: number): string {
-    return moment(date).format(this._d.monthFormat.replace(/y/g, 'Y'));
+    switch (this.mode) {
+      case 'quarter':
+        return moment(date).format(this._d.quarterFormat.replace(/y/g, 'Y'));
+      case 'year':
+        return moment(date).format(this._d.yearFormat.replace(/y/g, 'Y'));
+
+      default:
+        return moment(date).format(this._d.monthFormat.replace(/y/g, 'Y'));
+    }
   }
 
   private initOpt(): void {
@@ -409,6 +498,10 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
   }
 
   createMonth(date: number): CalendarMonth {
+    return this.calSvc.createMonthsByPeriod(date, 1, this._d)[0];
+  }
+
+  createQuarter(date: number): CalendarMonth {
     return this.calSvc.createMonthsByPeriod(date, 1, this._d)[0];
   }
 

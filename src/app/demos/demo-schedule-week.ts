@@ -1,27 +1,39 @@
 import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { CalendarComponentOptions, CalendarDay, DayConfig } from 'ion-calendar';
+import {
+  CalendarComponentOptions,
+  CalendarDay,
+  DayConfig,
+  SelectMode,
+} from 'ion-calendar';
 import * as moment from 'moment';
 @Component({
   selector: 'demo-schedule-week',
   template: `
     <ion-calendar
       #calendar
+      [mode]="mode"
       [ngModel]="date"
       (select)="onSelect($event)"
+      (monthChange)="vlog($event)"
+      (quarterChange)="vlog($event)"
+      (yearChange)="vlog($event)"
       [options]="options"
       type="js-date"
       format="YYYY-MM-DD"
     >
     </ion-calendar>
+
+    <div>1243</div>
   `,
 })
 export class DemoScheduleWeekComponent {
   date: any;
+  mode: SelectMode = 'year';
   options: CalendarComponentOptions = {
     from: new Date(2000, 0, 1),
     pickMode: 'single-week',
-    weekStart:0,
+    weekStart: 0,
     firstDay: 4,
   };
 
@@ -71,5 +83,9 @@ export class DemoScheduleWeekComponent {
     //   from: moment().subtract(wd, 'days'),
     //   to: moment().add(6 - wd, 'days'),
     // };
+  }
+
+  vlog($event: any) {
+    console.log($event);
   }
 }

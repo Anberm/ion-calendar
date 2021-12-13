@@ -1,5 +1,7 @@
 import { AnimationBuilder } from '@ionic/core';
 
+export type SelectMode = 'month' | 'quarter' | 'year' | undefined;
+
 export interface ScheduleDay {
   id: string;
   day: string;
@@ -42,6 +44,11 @@ export interface CalendarDay {
 export class CalendarMonth {
   original: CalendarOriginal;
   days: Array<CalendarDay | any>;
+}
+
+export class CalendarQuarter {
+  original: CalendarOriginal;
+  quarters: Array<number | any>;
 }
 
 export interface ScheduleData {
@@ -96,7 +103,7 @@ export interface CalendarOptions {
   /**
    * 一周的第一天是周几，周一：0，周日：6
    */
-  firstDay?:number;
+  firstDay?: number;
   from?: Date | number;
   to?: Date | number;
   pickMode?: PickMode;
@@ -104,6 +111,8 @@ export interface CalendarOptions {
   disableWeeks?: Array<number>;
   weekdays?: Array<string>;
   monthFormat?: string;
+  quarterFormat?: string;
+  yearFormat?: string;
   color?: string;
   defaultTitle?: string;
   defaultSubtitle?: string;
@@ -127,12 +136,23 @@ export class CalendarResult {
   string: string;
   years: number;
   months: number;
+  quarter: number;
   date: number;
 }
 
 export class CalendarComponentMonthChange {
   oldMonth: CalendarResult;
   newMonth: CalendarResult;
+}
+
+export class CalendarComponentQuarterChange {
+  oldQuarter: CalendarResult;
+  newQuarter: CalendarResult;
+}
+
+export class CalendarComponentYearChange {
+  oldYear: CalendarResult;
+  newYear: CalendarResult;
 }
 
 export type DefaultDate = Date | string | number | null;
@@ -143,7 +163,7 @@ export type Colors =
   | 'light'
   | 'dark'
   | string;
-export type PickMode = 'multi' | 'single' | 'range'| 'single-week' ;
+export type PickMode = 'multi' | 'single' | 'range' | 'single-week';
 export type CalendarComponentTypeProperty =
   | 'string'
   | 'js-date'

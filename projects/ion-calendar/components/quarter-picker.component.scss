@@ -1,0 +1,66 @@
+:host .quarter-picker {
+  margin: 20px 0;
+  display: inline-block;
+  width: 100%; }
+
+:host .quarter-packer-item {
+  width: 25%;
+  box-sizing: border-box;
+  float: left;
+  height: 50px;
+  padding: 5px; }
+  :host .quarter-packer-item button {
+    border-radius: 32px;
+    width: 100%;
+    height: 100%;
+    font-size: 0.9em;
+    background-color: transparent; }
+
+:host .quarter-picker.primary .quarter-packer-item.this-quarter button {
+  border: 1px solid var(--ion-color-primary); }
+
+:host .quarter-picker.primary .quarter-packer-item.active button {
+  background-color: var(--ion-color-primary);
+  color: #fff; }
+
+:host .quarter-picker.secondary .quarter-packer-item.this-quarter button {
+  border: 1px solid var(--ion-color-secondary); }
+
+:host .quarter-picker.secondary .quarter-packer-item.active button {
+  background-color: var(--ion-color-secondary);
+  color: #fff; }
+
+:host .quarter-picker.danger .quarter-packer-item.this-quarter button {
+  border: 1px solid var(--ion-color-danger); }
+
+:host .quarter-picker.danger .quarter-packer-item.active button {
+  background-color: var(--ion-color-danger);
+  color: #fff; }
+
+:host .quarter-picker.dark .quarter-packer-item.this-quarter button {
+  border: 1px solid var(--ion-color-dark); }
+
+:host .quarter-picker.dark .quarter-packer-item.active button {
+  background-color: var(--ion-color-dark);
+  color: #fff; }
+
+:host .quarter-picker.light .quarter-packer-item.this-quarter button {
+  border: 1px solid var(--ion-color-light); }
+
+:host .quarter-picker.light .quarter-packer-item.active button {
+  background-color: var(--ion-color-light);
+  color: #9e9e9e; }
+
+:host .quarter-picker.transparent {
+  background-color: transparent; }
+  :host .quarter-picker.transparent .quarter-packer-item.this-quarter button {
+    border: 1px solid var(--ion-color-light); }
+  :host .quarter-picker.transparent .quarter-packer-item.active button {
+    background-color: var(--ion-color-light);
+    color: #9e9e9e; }
+
+:host .quarter-picker.cal-color .quarter-packer-item.this-quarter button {
+  border: 1px solid; }
+
+:host .quarter-picker.cal-color .quarter-packer-item.active button {
+  color: #fff; }

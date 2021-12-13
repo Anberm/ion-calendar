@@ -44,6 +44,8 @@ export class CalendarService {
       closeLabel = '取消',
       doneLabel = '确定',
       monthFormat = 'yyyy 年 MM 月',
+      quarterFormat = 'yyyy 年第 Q 季度',
+      yearFormat = 'yyyy 年',
       title = '日历',
       defaultTitle = '',
       defaultSubtitle = '',
@@ -81,6 +83,8 @@ export class CalendarService {
       isSaveHistory,
       disableWeeks,
       monthFormat,
+      quarterFormat,
+      yearFormat,
       title,
       weekdays,
       daysConfig,
@@ -321,6 +325,7 @@ export class CalendarService {
       string: _moment.format(defaults.DATE_FORMAT),
       years: _moment.year(),
       months: _moment.month() + 1,
+      quarter:_moment.quarter(),
       date: _moment.date(),
     };
   }
