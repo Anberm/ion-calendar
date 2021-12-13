@@ -264,15 +264,25 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
 
     if (this.pickMode === pickModes.SINGLEWEEK) {
       const wd = moment(item.time).weekday();
-      const fir = moment(item.time)
+      let tgTime = item.time;
+      let fir = moment(tgTime)
         .subtract(wd - (this.opt.firstDay || 0), 'days')
         .valueOf();
-      const lat = moment(item.time)
+      if (fir > tgTime) {
+        tgTime = moment(tgTime).subtract(1, 'week').valueOf();
+
+        fir = moment(tgTime)
+          .subtract(wd - (this.opt.firstDay || 0), 'days')
+          .valueOf();
+      }
+      const lat = moment(tgTime)
         .add(6 + (this.opt.firstDay || 0) - wd, 'days')
         .valueOf();
       this._date[0] = this.calSvc.createCalendarDay(fir, this.opt);
       this._date[1] = this.calSvc.createCalendarDay(lat, this.opt);
       this.change.emit(this._date);
+      console.log(this._date);
+      
       return;
     }
 

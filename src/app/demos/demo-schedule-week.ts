@@ -21,7 +21,8 @@ export class DemoScheduleWeekComponent {
   options: CalendarComponentOptions = {
     from: new Date(2000, 0, 1),
     pickMode: 'single-week',
-    firstDay: 1,
+    weekStart:0,
+    firstDay: 4,
   };
 
   constructor(public modalCtrl: ModalController) {
