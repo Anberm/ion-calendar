@@ -1,6 +1,12 @@
 import { AnimationBuilder } from '@ionic/core';
 
-export type SelectMode = 'month' | 'quarter' | 'year' | undefined;
+export type SelectMode =
+  | 'day'
+  | 'week'
+  | 'month'
+  | 'quarter'
+  | 'year'
+  | undefined;
 
 export interface ScheduleDay {
   id: string;

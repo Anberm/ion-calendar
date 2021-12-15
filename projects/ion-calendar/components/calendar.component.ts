@@ -57,7 +57,8 @@ interface CompatibleIcons {
           (click)="switchView()"
         >
           {{ _monthFormat(monthOpt.original.time) }}
-          <ion-icon *ngIf="mode!=='year'"
+          <ion-icon
+            *ngIf="mode !== 'year'"
             class="arrow-dropdown"
             [name]="
               _view === 'days'
@@ -108,7 +109,7 @@ interface CompatibleIcons {
     </div>
     <ng-template [ngIf]="_view === 'days'" [ngIfElse]="monthPicker">
       <ion-calendar-week
-        *ngIf="!mode"
+        *ngIf="showDays"
         color="transparent"
         [weekArray]="_d.weekdays"
         [weekStart]="_d.weekStart"
@@ -116,7 +117,7 @@ interface CompatibleIcons {
       </ion-calendar-week>
 
       <ion-calendar-month
-        *ngIf="!mode"
+        *ngIf="showDays"
         [opt]="_d"
         [componentMode]="true"
         [(ngModel)]="_calendarMonthValue"
@@ -181,6 +182,12 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
   }
   get mode() {
     return this._mode;
+  }
+
+  get showDays(): boolean {
+    return (
+      this.mode === 'day' || this.mode === 'week' || this.mode === undefined
+    );
   }
 
   @Input()
@@ -393,9 +400,8 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
 
     this._oldQuarter = quarter;
 
-    
     this.monthOpt = this.createMonth(newQuarter);
-    
+
     this.quarterChange.emit({
       oldQuarter: this.calSvc.multiFormat(oldQuarterTime),
       newQuarter: this.calSvc.multiFormat(newQuarter),

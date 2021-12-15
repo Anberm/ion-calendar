@@ -25,11 +25,13 @@ import * as moment from 'moment';
     </ion-calendar>
 
     <div>1243</div>
+    <ion-button (click)="changeMode()">{{ mode }}</ion-button>
   `,
 })
 export class DemoScheduleWeekComponent {
   date: any;
   mode: SelectMode = 'year';
+  modes = ['day', 'week', 'month', 'quarter', 'year'];
   options: CalendarComponentOptions = {
     from: new Date(2000, 0, 1),
     pickMode: 'single-week',
@@ -87,5 +89,13 @@ export class DemoScheduleWeekComponent {
 
   vlog($event: any) {
     console.log($event);
+  }
+
+  changeMode(): void {
+    let i = this.modes.findIndex((m) => m === this.mode);
+    if (i === this.modes.length - 1) {
+      i = -1;
+    }
+    this.mode = this.modes[i+1] as SelectMode;
   }
 }
