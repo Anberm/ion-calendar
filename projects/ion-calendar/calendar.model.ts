@@ -145,7 +145,10 @@ export class CalendarResult {
   quarter: number;
   date: number;
 }
-
+export class CalendarComponentWeekChange {
+  oldWeek: CalendarResult;
+  newWeek: CalendarResult;
+}
 export class CalendarComponentMonthChange {
   oldMonth: CalendarResult;
   newMonth: CalendarResult;

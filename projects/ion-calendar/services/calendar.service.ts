@@ -69,7 +69,7 @@ export class CalendarService {
       id,
       from,
       to,
-      firstDay:calendarOptions.firstDay,
+      firstDay: calendarOptions.firstDay,
       pickMode,
       autoDone,
       color,
@@ -106,6 +106,7 @@ export class CalendarService {
     const date = new Date(time);
     const year = date.getFullYear();
     const month = date.getMonth();
+    const day = date.getDate();
     const firstWeek = new Date(year, month, 1).getDay();
     const howManyDays = moment(time).daysInMonth();
     return {
@@ -113,7 +114,7 @@ export class CalendarService {
       month,
       firstWeek,
       howManyDays,
-      time: new Date(year, month, 1).getTime(),
+      time: new Date(year, month, day).getTime(),
       date: new Date(time),
     };
   }
@@ -269,7 +270,8 @@ export class CalendarService {
   createMonthsByPeriod(
     startTime: number,
     monthsNum: number,
-    opt: CalendarModalOptions
+    opt: CalendarModalOptions,
+    isExactTime: boolean = true
   ): Array<CalendarMonth> {
     let _array: Array<CalendarMonth> = [];
 
@@ -279,6 +281,9 @@ export class CalendarService {
       _start.getMonth(),
       1
     ).getTime();
+    if (isExactTime) {
+      _startMonth = _start.getTime();
+    }
 
     for (let i = 0; i < monthsNum; i++) {
       let time = moment(_startMonth).add(i, 'M').valueOf();
@@ -325,7 +330,7 @@ export class CalendarService {
       string: _moment.format(defaults.DATE_FORMAT),
       years: _moment.year(),
       months: _moment.month() + 1,
-      quarter:_moment.quarter(),
+      quarter: _moment.quarter(),
       date: _moment.date(),
     };
   }
