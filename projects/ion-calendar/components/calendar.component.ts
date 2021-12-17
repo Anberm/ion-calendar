@@ -56,7 +56,15 @@ interface CompatibleIcons {
           "
           (click)="switchView()"
         >
-          {{ _monthFormat(monthOpt.original.time) }}
+          <div>
+            <div>{{ _monthFormat(monthOpt.original.time) }}</div>
+            <div
+              class="sub-title"
+              *ngIf="_mode === 'week' && _view === 'month'"
+            >
+              {{ weekSubTitle }}
+            </div>
+          </div>
           <ion-icon
             *ngIf="mode !== 'year'"
             class="arrow-dropdown"
@@ -75,7 +83,9 @@ interface CompatibleIcons {
             getDate(monthOpt.original.time) | date: MONTH_DATE_FORMAT
           "
         >
-          {{ _monthFormat(monthOpt.original.time) }}
+          <div>
+            <div>{{ _monthFormat(monthOpt.original.time) }}</div>
+          </div>
         </div>
       </ng-template>
       <ng-template [ngIf]="_showToggleButtons">
@@ -118,6 +128,7 @@ interface CompatibleIcons {
 
       <ion-calendar-month
         *ngIf="showDays"
+        [mode]="_mode"
         [opt]="_d"
         [componentMode]="true"
         [(ngModel)]="_calendarMonthValue"
@@ -136,7 +147,7 @@ interface CompatibleIcons {
 
     <ng-template #monthPicker>
       <ion-calendar-month-picker
-        *ngIf="!mode || mode == 'month'"
+        *ngIf="!mode || mode == 'month' || mode == 'day'"
         [color]="_d.color"
         [monthFormat]="_options?.monthPickerFormat"
         (select)="monthOnSelect($event)"
@@ -147,6 +158,32 @@ interface CompatibleIcons {
         *ngIf="mode == 'quarter'"
         (select)="quarterOnSelect($event)"
       ></ion-calendar-quarter-picker>
+
+      <ion-calendar-week
+        *ngIf="mode == 'week'"
+        color="transparent"
+        [weekArray]="_d.weekdays"
+        [weekStart]="_d.weekStart"
+      >
+      </ion-calendar-week>
+
+      <ion-calendar-month
+        *ngIf="mode == 'week'"
+        [opt]="_d"
+        [mode]="_mode"
+        [componentMode]="true"
+        [(ngModel)]="_calendarMonthValue"
+        [month]="monthOpt"
+        [readonly]="readonly"
+        (change)="onChanged($event)"
+        (swipe)="swipeEvent($event)"
+        (select)="select.emit($event)"
+        (selectStart)="selectStart.emit($event)"
+        (selectEnd)="selectEnd.emit($event)"
+        [pickMode]="_d.pickMode"
+        [color]="_d.color"
+      >
+      </ion-calendar-month>
     </ng-template>
   `,
 })
@@ -179,16 +216,35 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
   @Input()
   set mode(val: SelectMode) {
     this._mode = val;
+    if (this._mode === 'week') {
+      const wd = moment(this._calendarMonthValue[0].time).weekday();
+      let tgTime = this._calendarMonthValue[0].time;
+      let fir = moment(tgTime)
+        .subtract(wd - (this._d.firstDay || 0), 'days')
+        .valueOf();
+      if (fir > tgTime) {
+        tgTime = moment(tgTime).subtract(1, 'week').valueOf();
+
+        fir = moment(tgTime)
+          .subtract(wd - (this._d.firstDay || 0), 'days')
+          .valueOf();
+      }
+      const lat = moment(tgTime)
+        .add(6 + (this._d.firstDay || 0) - wd, 'days')
+        .valueOf();
+      this._calendarMonthValue[0] = this.calSvc.createCalendarDay(fir, this._d);
+      this._calendarMonthValue[1] = this.calSvc.createCalendarDay(lat, this._d);
+    }
   }
   get mode() {
     return this._mode;
   }
 
   get showDays(): boolean {
-    return (
-      this.mode === 'day' || this.mode === 'week' || this.mode === undefined
-    );
+    return this.mode === 'day' || this.mode === undefined;
   }
+
+  weekSubTitle = '';
 
   @Input()
   format: string = defaults.DATE_FORMAT;
@@ -267,9 +323,10 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
 
   prev(): void {
     if (
-      this._view === 'days' &&
-      this.mode != 'quarter' &&
-      this.mode != 'year'
+      (this._view === 'days' &&
+        this.mode != 'quarter' &&
+        this.mode != 'year') ||
+      this.mode == 'week'
     ) {
       this.backMonth();
     } else {
@@ -279,9 +336,10 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
 
   next(): void {
     if (
-      this._view === 'days' &&
-      this.mode != 'quarter' &&
-      this.mode != 'year'
+      (this._view === 'days' &&
+        this.mode != 'quarter' &&
+        this.mode != 'year') ||
+      this.mode == 'week'
     ) {
       this.nextMonth();
     } else {
@@ -411,9 +469,21 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
   onChanged($event: CalendarDay[]): void {
     switch (this._d.pickMode) {
       case pickModes.SINGLE:
-        const date = this._handleType($event[0].time);
-        this._onChanged(date);
-        this.change.emit(date);
+        if (this.mode === 'week') {
+          if ($event[0] && $event[1]) {
+            const rangeDate = {
+              from: this._handleType($event[0].time),
+              to: this._handleType($event[1].time),
+            };
+            this._onChanged(rangeDate);
+            this.change.emit(rangeDate);
+          }
+        } else {
+          const date = this._handleType($event[0].time);
+          this._onChanged(date);
+          this.change.emit(date);
+        }
+
         break;
 
       case pickModes.SINGLEWEEK:
@@ -453,6 +523,9 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
 
       default:
     }
+    if (this.mode === 'week') {
+      this._view = 'days';
+    }
   }
 
   swipeEvent($event: any): void {
@@ -484,6 +557,15 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
         return moment(date).format(this._d.quarterFormat.replace(/y/g, 'Y'));
       case 'year':
         return moment(date).format(this._d.yearFormat.replace(/y/g, 'Y'));
+      case 'week':
+        this.weekSubTitle = moment(date).format(
+          this._d.monthFormat.replace(/y/g, 'Y')
+        );
+        return `${moment(this._calendarMonthValue[0].time).month() + 1}.${
+          this._calendarMonthValue[0].title
+        } - ${moment(this._calendarMonthValue[1].time).month() + 1}.${
+          this._calendarMonthValue[1].title
+        }`;
 
       default:
         return moment(date).format(this._d.monthFormat.replace(/y/g, 'Y'));
@@ -562,7 +644,20 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
 
     switch (this._d.pickMode) {
       case 'single':
-        this._calendarMonthValue[0] = this._createCalendarDay(value);
+        if (this.mode === 'week') {
+          if (value.from) {
+            this._calendarMonthValue[0] = value.from
+              ? this._createCalendarDay(value.from)
+              : null;
+          }
+          if (value.to) {
+            this._calendarMonthValue[1] = value.to
+              ? this._createCalendarDay(value.to)
+              : null;
+          }
+        } else {
+          this._calendarMonthValue[0] = this._createCalendarDay(value);
+        }
         break;
       case 'single-week':
         if (value.from) {

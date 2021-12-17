@@ -3,7 +3,11 @@
   box-sizing: border-box;
   display: inline-block;
   background-color: #fff;
-  width: 100%; }
+  width: 100%; 
+  .sub-title{
+    font-size: 12px;
+  }
+}
   :host .title {
     padding: 0 40px 0 40px;
     overflow: hidden; }

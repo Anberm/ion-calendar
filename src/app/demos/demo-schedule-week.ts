@@ -34,7 +34,7 @@ export class DemoScheduleWeekComponent {
   modes = ['day', 'week', 'month', 'quarter', 'year'];
   options: CalendarComponentOptions = {
     from: new Date(2000, 0, 1),
-    pickMode: 'single-week',
+    pickMode: 'single',
     weekStart: 0,
     firstDay: 4,
   };

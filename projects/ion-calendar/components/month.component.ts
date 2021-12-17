@@ -15,6 +15,7 @@ import {
   CalendarMonth,
   CalendarOriginal,
   PickMode,
+  SelectMode,
 } from '../calendar.model';
 import { defaults, pickModes } from '../config';
 import * as moment from 'moment';
@@ -110,6 +111,14 @@ export const MONTH_VALUE_ACCESSOR: any = {
   `,
 })
 export class MonthComponent implements ControlValueAccessor, AfterViewInit {
+  _mode: SelectMode = undefined;
+  @Input()
+  set mode(val: SelectMode) {
+    this._mode = val;
+  }
+  get mode() {
+    return this._mode;
+  }
   @Input() opt: CalendarModalOptions;
   @Input() componentMode = false;
   @Input()
@@ -144,7 +153,8 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
   get _isRange(): boolean {
     return (
       this.pickMode === pickModes.RANGE ||
-      this.pickMode === pickModes.SINGLEWEEK
+      this.pickMode === pickModes.SINGLEWEEK ||
+      this.mode === 'week'
     );
   }
 
@@ -183,7 +193,8 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
     if (!day) return false;
     if (
       (this.pickMode !== pickModes.RANGE &&
-        this.pickMode !== pickModes.SINGLEWEEK) ||
+        this.pickMode !== pickModes.SINGLEWEEK &&
+        this.mode !== 'week') ||
       !this._isInit ||
       this._date[1] === null
     ) {
@@ -202,7 +213,8 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
 
     if (
       (this.pickMode !== pickModes.RANGE &&
-        this.pickMode !== pickModes.SINGLEWEEK) ||
+        this.pickMode !== pickModes.SINGLEWEEK &&
+        this.mode !== 'week') ||
       !this._isInit
     ) {
       return false;
@@ -222,7 +234,8 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
     if (!day) return false;
     if (
       (this.pickMode !== pickModes.RANGE &&
-        this.pickMode !== pickModes.SINGLEWEEK) ||
+        this.pickMode !== pickModes.SINGLEWEEK &&
+        this.mode !== 'week') ||
       !this._isInit ||
       this._date[0] === null
     ) {
@@ -257,8 +270,29 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
     item.selected = true;
     this.select.emit(item);
     if (this.pickMode === pickModes.SINGLE) {
-      this._date[0] = item;
-      this.change.emit(this._date);
+      if (this.mode === 'week') {
+        const wd = moment(item.time).weekday();
+        let tgTime = item.time;
+        let fir = moment(tgTime)
+          .subtract(wd - (this.opt.firstDay || 0), 'days')
+          .valueOf();
+        if (fir > tgTime) {
+          tgTime = moment(tgTime).subtract(1, 'week').valueOf();
+
+          fir = moment(tgTime)
+            .subtract(wd - (this.opt.firstDay || 0), 'days')
+            .valueOf();
+        }
+        const lat = moment(tgTime)
+          .add(6 + (this.opt.firstDay || 0) - wd, 'days')
+          .valueOf();
+        this._date[0] = this.calSvc.createCalendarDay(fir, this.opt);
+        this._date[1] = this.calSvc.createCalendarDay(lat, this.opt);
+        this.change.emit(this._date);
+      } else {
+        this._date[0] = item;
+        this.change.emit(this._date);
+      }
       return;
     }
 
@@ -281,8 +315,7 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
       this._date[0] = this.calSvc.createCalendarDay(fir, this.opt);
       this._date[1] = this.calSvc.createCalendarDay(lat, this.opt);
       this.change.emit(this._date);
-      console.log(this._date);
-      
+
       return;
     }
 
