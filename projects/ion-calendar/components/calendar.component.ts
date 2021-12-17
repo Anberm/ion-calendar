@@ -211,14 +211,30 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
     this._showMonthPicker = value;
   }
 
+  @Input()
+  set options(value: CalendarComponentOptions) {
+    this._options = value;
+    this.initOpt();
+    if (this.monthOpt && this.monthOpt.original) {
+      this.monthOpt = this.createMonth(this.monthOpt.original.time);
+    }
+  }
+
+  get options(): CalendarComponentOptions {
+    return this._options;
+  }
+
   monthOpt: CalendarMonth;
   _mode: SelectMode = undefined;
   @Input()
   set mode(val: SelectMode) {
-    this._mode = val;
-    if (this._mode === 'week') {
-      const wd = moment(this._calendarMonthValue[0].time).weekday();
-      let tgTime = this._calendarMonthValue[0].time;
+    if (val === 'week') {
+      let itemTime = new Date().getTime();
+      if (this._calendarMonthValue[0]) {
+        itemTime = this._calendarMonthValue[0].time;
+      }
+      const wd = moment(itemTime).weekday();
+      let tgTime = itemTime;
       let fir = moment(tgTime)
         .subtract(wd - (this._d.firstDay || 0), 'days')
         .valueOf();
@@ -235,6 +251,7 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
       this._calendarMonthValue[0] = this.calSvc.createCalendarDay(fir, this._d);
       this._calendarMonthValue[1] = this.calSvc.createCalendarDay(lat, this._d);
     }
+    this._mode = val;
   }
   get mode() {
     return this._mode;
@@ -266,19 +283,6 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
   selectStart: EventEmitter<CalendarDay> = new EventEmitter();
   @Output()
   selectEnd: EventEmitter<CalendarDay> = new EventEmitter();
-
-  @Input()
-  set options(value: CalendarComponentOptions) {
-    this._options = value;
-    this.initOpt();
-    if (this.monthOpt && this.monthOpt.original) {
-      this.monthOpt = this.createMonth(this.monthOpt.original.time);
-    }
-  }
-
-  get options(): CalendarComponentOptions {
-    return this._options;
-  }
 
   readonly MONTH_DATE_FORMAT = 'MMMM yyyy';
 
@@ -561,11 +565,13 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
         this.weekSubTitle = moment(date).format(
           this._d.monthFormat.replace(/y/g, 'Y')
         );
-        return `${moment(this._calendarMonthValue[0].time).month() + 1}.${
-          this._calendarMonthValue[0].title
-        } - ${moment(this._calendarMonthValue[1].time).month() + 1}.${
-          this._calendarMonthValue[1].title
-        }`;
+        return this._calendarMonthValue[0]
+          ? `${moment(this._calendarMonthValue[0].time).month() + 1}.${
+              this._calendarMonthValue[0].title
+            } - ${moment(this._calendarMonthValue[1].time).month() + 1}.${
+              this._calendarMonthValue[1].title
+            }`
+          : moment(date).format(this._d.monthFormat.replace(/y/g, 'Y'));
 
       default:
         return moment(date).format(this._d.monthFormat.replace(/y/g, 'Y'));

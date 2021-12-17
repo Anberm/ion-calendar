@@ -12,7 +12,7 @@ import * as moment from 'moment';
   template: `
     <ion-calendar
       #calendar
-      [mode]="mode"
+     
       [ngModel]="date"
       (select)="onSelect($event)"
       (monthChange)="vlog($event)"
@@ -21,6 +21,7 @@ import * as moment from 'moment';
       [options]="options"
       type="js-date"
       format="YYYY-MM-DD"
+      [mode]="mode"
     >
     </ion-calendar>
 
@@ -30,7 +31,7 @@ import * as moment from 'moment';
 })
 export class DemoScheduleWeekComponent {
   date: any;
-  mode: SelectMode = 'year';
+  mode: SelectMode = 'week';
   modes = ['day', 'week', 'month', 'quarter', 'year'];
   options: CalendarComponentOptions = {
     from: new Date(2000, 0, 1),
