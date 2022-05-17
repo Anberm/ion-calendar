@@ -148,6 +148,8 @@ export class CalendarResult {
 export class CalendarComponentWeekChange {
   oldWeek: CalendarResult;
   newWeek: CalendarResult;
+  from: CalendarComponentPayloadTypes;
+  to: CalendarComponentPayloadTypes;
 }
 export class CalendarComponentMonthChange {
   oldMonth: CalendarResult;

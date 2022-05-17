@@ -389,22 +389,21 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
       .add(1, 'weeks')
       .valueOf();
     const oldMontTime = this.monthOpt.original.time;
-    console.log('new',new Date(nextTime));
-    console.log('old',new Date(oldMontTime));
+
     this.updateCalendarMonthValue(nextTime);
     this.monthOpt = this.createMonth(nextTime);
+    const rangeDate = {
+      from: this._handleType(this._calendarMonthValue[0].time),
+      to: this._handleType(this._calendarMonthValue[1].time),
+    };
+    this._onChanged(rangeDate);
+    this.change.emit(rangeDate);
     this.weekChange.emit({
       oldWeek: this.calSvc.multiFormat(oldMontTime),
       newWeek: this.calSvc.multiFormat(nextTime),
+      from: rangeDate.from,
+      to: rangeDate.to,
     });
-    if (this.mode == 'week') {
-      const rangeDate = {
-        from: this._handleType(this._calendarMonthValue[0].time),
-        to: this._handleType(this._calendarMonthValue[1].time),
-      };
-      this._onChanged(rangeDate);
-      this.change.emit(rangeDate);
-    }
   }
 
   nextMonth(): void {
@@ -432,24 +431,22 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
       .subtract(1, 'weeks')
       .valueOf();
     const oldMontTime = this.monthOpt.original.time;
-    console.log('new',new Date(backTime));
-    console.log('old',new Date(oldMontTime));
-    
 
-    this.monthOpt = this.createMonth(backTime);
     this.updateCalendarMonthValue(backTime);
+    this.monthOpt = this.createMonth(backTime);
+
+    const rangeDate = {
+      from: this._handleType(this._calendarMonthValue[0].time),
+      to: this._handleType(this._calendarMonthValue[1].time),
+    };
+    this._onChanged(rangeDate);
+    this.change.emit(rangeDate);
     this.weekChange.emit({
       oldWeek: this.calSvc.multiFormat(oldMontTime),
       newWeek: this.calSvc.multiFormat(backTime),
+      from: rangeDate.from,
+      to: rangeDate.to,
     });
-    if (this.mode == 'week') {
-      const rangeDate = {
-        from: this._handleType(this._calendarMonthValue[0].time),
-        to: this._handleType(this._calendarMonthValue[1].time),
-      };
-      this._onChanged(rangeDate);
-      this.change.emit(rangeDate);
-    }
   }
 
   backMonth(): void {
